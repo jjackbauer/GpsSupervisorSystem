@@ -1,0 +1,16 @@
+{
+  "name": "gps",
+  "version": "1.0.0",
+  "description": "Sistema de um GPS",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Weverton Bruno & Ricardo Medeiros",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "serialport": "^7.1.5"
+  }
+}
