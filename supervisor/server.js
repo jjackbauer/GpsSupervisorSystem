@@ -18,7 +18,7 @@ function nmeaConverter(value, direction){
    */
   DD = parseInt(parseFloat(value)/100);
   SS = parseFloat(value) - DD * 100;
-  decimal = (DD + SS/60);
+  decimal = parseFloat((DD + SS/60).toFixed(6));
   return direction == 'S' || direction == 'W' ? -1*decimal : decimal;
 }
 
@@ -67,15 +67,7 @@ parser.on('data', data =>{
     switch(status){
       case 'V': global.gpsData = {status: 404, msg: "Sinal não encontrado!", datetime: getDateTime(dados[9], dados[1])};
                 break;
-      case 'A': 
-          if(global.gpsData){
-			  dist =distance(global.gpsData.latitude, global.gpsData.longitude , nmeaConverter(dados[3], dados[4]),nmeaConverter(dados[5], dados[6]))
-			  //console.log(dist);
-            //if(dist>1000){
-              //return false;
-            //}
-          }
-          global.gpsData = {status: 200, datetime: getDateTime(dados[9], dados[1]), latitude: nmeaConverter(dados[3], dados[4]), longitude: nmeaConverter(dados[5], dados[6])};
+      case 'A': global.gpsData = {status: 200, datetime: getDateTime(dados[9], dados[1]), latitude: nmeaConverter(dados[3], dados[4]), longitude: nmeaConverter(dados[5], dados[6])};
                 break;
       default: global.gpsData = {status: 404, msg: "Sinal não encontrado!", datetime: getDateTime(dados[9], dados[1])};
                 break;
