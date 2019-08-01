@@ -70,14 +70,3 @@ function setDecoderResults(data){
         $('.position-td').html("");
     }
 }
-
-function nmeaConverter(value, direction){
-    /**
-     * @params:
-     * @value String com o valor de lat e lng gerado pelo gps
-     */
-    DD = parseInt(parseFloat(value)/100);
-    SS = parseFloat(value) - DD * 100;
-    decimal = (DD + SS/60);
-    return direction == 'S' || direction == 'W' ? -1*decimal : decimal;
-}
