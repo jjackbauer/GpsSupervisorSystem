@@ -34,7 +34,7 @@ $(document).ready(function () {
 
     //seta a 
     //setPosition();
-    setInterval(setPosition, 30000);
+    setInterval(setPosition, 2000);
     
 });
 
