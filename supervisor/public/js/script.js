@@ -65,7 +65,7 @@ function setDecoderResults(data){
      * @data objeto com valores para setar na tabela    
      */
     if(data){
-    $('.position-td').html(`${data.latitude>0? data.latitude + ' N': Math.abs(data.latitude) + ' S'}, ${data.latitude>0? data.latitude + ' E': Math.abs(data.latitude) + ' W'}`)
+    $('.position-td').html(`${data.latitude>0? data.latitude + ' N': Math.abs(data.latitude) + ' S'}, ${data.longitude>0? data.longitude + ' E': Math.abs(data.longitude) + ' W'}`)
     }else{
         $('.position-td').html("");
     }
