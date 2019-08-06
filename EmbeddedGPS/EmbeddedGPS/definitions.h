@@ -1,11 +1,3 @@
-/*
- * definitions.h
- *
- * Created: 01/08/2019 09:13:42
- *  Author: jzrhard03
- */ 
-
-
 #ifndef DEFINITIONS_H_
 #define DEFINITIONS_H_
 
