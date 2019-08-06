@@ -2,9 +2,7 @@
 #define USART_H_
 
 #include "definitions.h"
-
-//  Werte fuer die Baudraten des U(S)ART      --> BR = BaudRate   MCK = MasterClocK   CD = ClockDivisor
-#define   BAUD_9600     547   //  Wert fuer   9600 Baud ( BR = MCK / (16 * CD) --> CD = MCK / (16 * BR) --> CD = 84.000.000 / (16 *   9600) =  546875)
+#define   BAUD_9600     547 //Config 9600 baudrate
 
 #define   USART0_PMC_ENABLE           0x00020000    //  P_ID  17
 #define   USART0_PIN_CONTROL_TO_PERI  0x00000C00    //  Pin 10 und 11

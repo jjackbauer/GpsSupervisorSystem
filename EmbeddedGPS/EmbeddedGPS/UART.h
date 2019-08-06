@@ -1,16 +1,15 @@
 #ifndef UART_H_
 #define UART_H_
 
-#include "definitions.h"			//necessário conhecer a FCPU
-
-#define BAUD 9600					// taxa de comunicação
+#include "definitions.h"
+#define BAUD 9600
 #define UART_CD  FCPU/16/BAUD
-#define tam_bufferRX 10				// tamanho do buffer de recepcao de dados
+#define tam_bufferRX 10
 
 void UART_Handler();
 void limpaBufferRX();
-void inic_UART();
-void inic_Interrupt_RX();
+void init_UART();
+void init_Interrupt_RX();
 void escreve_UARTcarac(char c);
 void escreve_UARTmsg(char * msg);
 char * returnBufferRX();
