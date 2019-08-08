@@ -1,10 +1,10 @@
-const SerialPort = require('serialport');
+﻿const SerialPort = require('serialport');
 const Readline = require('@serialport/parser-readline');
 const express = require('express');
 const path = require('path');
 var public = path.join(__dirname, 'public');
 
-const port = new SerialPort('COM5', { baudRate: 9600 });
+const port = new SerialPort('COM19', { baudRate: 9600 });
 const parser = port.pipe(new Readline({ delimiter: '\n' }));
 
 const app = express();
@@ -18,7 +18,7 @@ function nmeaConverter(value, direction){
    */
   DD = parseInt(parseFloat(value)/100);
   SS = parseFloat(value) - DD * 100;
-  decimal = parseFloat((DD + SS/60).toFixed(6));
+  decimal = (DD + SS/60);
   return direction == 'S' || direction == 'W' ? -1*decimal : decimal;
 }
 
@@ -40,7 +40,17 @@ function getDateTime(date, time){
 	hour = parseInt(time[0]+time[1]);
 	min = parseInt(time[2]+time[3]);
 	sec = parseInt(time[4]+time[5]);
-	return new Date(year,month-1, day, hour, min, sec);
+	return new Date(year,month-1, day, hour, min, sec).toUTCString();
+}
+
+/**
+ * 
+ * @param {String} value [knot]
+ * @return {Float} value [km/h] 
+ */
+function convertSpeed(value){
+  valueFloat = parseFloat(value);
+  return valueFloat * 1.852;
 }
 
 app.use(express.static(public));
@@ -65,9 +75,16 @@ parser.on('data', data =>{
 
   if(status) {
     switch(status){
-      case 'V': global.gpsData = {status: 404, msg: "Sinal não encontrado!", datetime: getDateTime(dados[9], dados[1])};
+      case 'V': global.gpsData = {status: 404, 
+        msg: "Sinal não encontrado!", 
+        datetime: getDateTime(dados[9], dados[1])};
                 break;
-      case 'A': global.gpsData = {status: 200, datetime: getDateTime(dados[9], dados[1]), latitude: nmeaConverter(dados[3], dados[4]), longitude: nmeaConverter(dados[5], dados[6])};
+      case 'A': 
+          global.gpsData = {status: 200, 
+            datetime: getDateTime(dados[9], dados[1]), 
+            latitude: nmeaConverter(dados[3], dados[4]), 
+            longitude: nmeaConverter(dados[5], dados[6]), 
+            speed: convertSpeed(dados[7])};
                 break;
       default: global.gpsData = {status: 404, msg: "Sinal não encontrado!", datetime: getDateTime(dados[9], dados[1])};
                 break;

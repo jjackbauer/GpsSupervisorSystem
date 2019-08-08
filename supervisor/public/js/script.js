@@ -1,7 +1,7 @@
 
 //iniciando mapa setando uma posição aleatória
 const mymap = L.map('mapid',{
-    center: [50.5,30.5], 
+    center: [-9.4,-40.5], 
     zoom: 10,
     zoomControl: false,
     zoomSnap: 0.25});
@@ -51,22 +51,41 @@ function setPosition(){
             mymap.setView([res.latitude, res.longitude]);
             marker.setLatLng([res.latitude, res.longitude]);
             polyline.addLatLng([res.latitude, res.longitude]);
-            setDecoderResults(res);
+            setDecoderResults(res, true);
         }else{
-            setDecoderResults(false)
-            if($('.status-td span').hasClass('circle-green')) $('.status-td').html(`<span class="circle-red"></span> Signal Active`);
+            setDecoderResults(res, false)
+            if($('.status-td span').hasClass('circle-green')) $('.status-td').html(`<span class="circle-red"></span> No Signal`);
         }
     }, 'json')
 }
 
-function setDecoderResults(data){
+function setDecoderResults(data, flag){
     /**
      * params:
      * @data objeto com valores para setar na tabela    
      */
-    if(data){
-    $('.position-td').html(`${data.latitude>0? data.latitude + ' N': Math.abs(data.latitude) + ' S'}, ${data.longitude>0? data.longitude + ' E': Math.abs(data.longitude) + ' W'}`)
+        var dataAtual = new Date(data.datetime);
+        let data2 = new Date(dataAtual.valueOf() - 2*dataAtual.getTimezoneOffset() * 60000);
+        var dataBase = data2.toISOString().replace(/\.\d{3}Z$/, '').replace('T', ' ');
+
+    if(flag){
+    $('.position-td').html(`${data.latitude>0? data.latitude + ' N': Math.abs(data.latitude) + ' S'}, ${data.latitude>0? data.latitude + ' E': Math.abs(data.latitude) + ' W'}`);
+    $('.time-td').html(dataBase);
+    $('.speed-td').html(data.speed);
     }else{
         $('.position-td').html("");
+        $('.time-td').html(dataBase);
+        $('.speed-td').html(data.speed?data.speed:'');
     }
+}
+
+function nmeaConverter(value, direction){
+    /**
+     * @params:
+     * @value String com o valor de lat e lng gerado pelo gps
+     */
+    DD = parseInt(parseFloat(value)/100);
+    SS = parseFloat(value) - DD * 100;
+    decimal = (DD + SS/60);
+    return direction == 'S' || direction == 'W' ? -1*decimal : decimal;
 }
